@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TK } from "../abi/TK";
 import toast from "react-hot-toast";
+import { ERC721 } from "../abi/ERC721";
 
 interface Auction {
   id: number;
@@ -27,6 +28,11 @@ function convertSecondsToTime(seconds: any) {
     seconds: remainingSeconds,
   };
 }
+
+const ERC721Names = {
+  "0x8c9C0D503031488bc801F0a1e976bc8AE13d20f8": "Art TKN",
+  "0x8713062d372FD09d374347BDef51CB7E22810dd4": "Color TKN",
+};
 
 const AuctionList: React.FC<AuctionListProps> = ({ account, web3 }) => {
   const auctionContractAddress = "0xC815E4601F85988AE2fe1802C2686e78b6bf55Fa";
@@ -191,30 +197,35 @@ const AuctionList: React.FC<AuctionListProps> = ({ account, web3 }) => {
             )}:${String(minutes).padStart(2, "0")}`;
 
             const currentTime = Math.floor(Date.now() / 1000);
-
             return (
               <tr key={indx}>
-                <td>{auction.tokenId}</td>
-                <td className="flex  h-full mt-10 items-center justify-center flex-col space-y-4">
+                <td className="">
+                  <div className="flex flex-col items-center justify-center">
+                    <span>{auction.tokenId}</span>
+                    {/* @ts-expect-error */}
+                    <span className="kbd kbd-sm w-max">{ERC721Names[auction.tokenContract]}</span>
+                  </div>
+                </td>
+                <td className="flex w-full h-full mt-10 items-center justify-center flex-col space-y-4">
                   {auction.isOpen ? (
                     <>
                       <span className="badge badge-primary">Yes</span>
                       {currentTime < Number(auction.startTime) ? (
-                        <span className="badge">Not Started</span>
+                        <span className="badge w-full min-w-full">Up Next</span>
                       ) : currentTime > Number(auction.startTime) &&
                         currentTime < Number(auction.endOfBiddingPeriod) ? (
-                        <span className="badge">Bidding Phase</span>
+                        <span className="badge">Bidding</span>
                       ) : currentTime > Number(auction.endOfBiddingPeriod) &&
                         currentTime < Number(auction.endOfRevealPeriod) ? (
-                        <span className="badge">Reveal Phase</span>
+                        <span className="badge">Reveal</span>
                       ) : (
                         <span className="badge">Time up</span>
                       )}
                     </>
                   ) : (
                     <div className="-mt-10 flex items-center justify-center flex-col space-y-4">
-                      <span className="badge badge-success">Auction ended</span>
                       <span className="badge badge-neutral">No</span>
+                      <span className="badge badge-success">Ended</span>
                     </div>
                   )}
                 </td>
