@@ -194,6 +194,25 @@ function Main() {
                 </h3>
               </div>
             </div>
+
+            <div className="mt-10">
+              <h2 className="text-lg font-medium text-gray-800">
+                Team
+              </h2>
+              <div className="text-base text-gray-700 mt-4 space-y-2">
+                <h3>
+                    
+                  1. Sagar Reddy
+                </h3>
+                <h3>
+                 2. Abhilash 
+                </h3>
+                <h3>
+3. Geethanjali
+                </h3>
+                
+              </div>
+            </div>
           </div>
         );
     }
